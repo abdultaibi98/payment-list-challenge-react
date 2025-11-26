@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getPaymentData } from './utils/getPayments';
 import {
   FetchParams,
@@ -57,7 +57,7 @@ export function usePaymentPage(): usePaymentPageProps {
     });
   }
 
-  async function fetchTotalPaymentsCount() {
+  const fetchTotalPaymentsCount = useCallback(async () => {
     const result = await getPaymentData({
       fetchParams: {
         search: fetchParams.search,
@@ -72,9 +72,9 @@ export function usePaymentPage(): usePaymentPageProps {
 
     const json: PaymentJson = await result.response.json();
     setTotal(json.total);
-  }
+  }, [fetchParams.search, fetchParams.currency]);
 
-  async function loadPaymentData() {
+  const loadPaymentData = useCallback(async () => {
     await fetchTotalPaymentsCount();
 
     const result = await getPaymentData({
@@ -94,11 +94,11 @@ export function usePaymentPage(): usePaymentPageProps {
 
     const json: PaymentJson = await result.response.json();
     setPayments(json.payments);
-  }
+  }, [fetchParams, fetchTotalPaymentsCount]);
 
   useEffect(() => {
     loadPaymentData();
-  }, [fetchParams]);
+  }, [fetchParams, loadPaymentData]);
 
   return {
     data: {
