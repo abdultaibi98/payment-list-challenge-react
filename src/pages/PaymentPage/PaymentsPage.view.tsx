@@ -14,10 +14,9 @@ import {
   Select,
   PaginationRow,
   PaginationButton,
-  EmptyBox,
 } from '../../components/components';
 import { I18N } from '../../constants/i18n';
-import { CURRENCIES } from '../../constants/index';
+import { CURRENCIES, MAX_TABLE_SIZE } from '../../constants/index';
 
 export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   payments,
@@ -29,6 +28,9 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   setSelectedCurrency,
   status,
   pageNumber,
+  onNextPage,
+  onPreviousPage,
+  total,
 }) => {
   return (
     <Container>
@@ -62,16 +64,24 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         <>
           <TableWrapper>
             <TableComponent payments={payments} />
-          </TableWrapper>
-          <EmptyBox>
             <PaginationRow>
-              <PaginationButton disabled={true}>
+              <PaginationButton
+                disabled={pageNumber === 1}
+                onClick={onPreviousPage}
+              >
                 {I18N.PREVIOUS_BUTTON}
               </PaginationButton>
-              Page {pageNumber}
-              <PaginationButton>{I18N.NEXT_BUTTON}</PaginationButton>
+              {I18N.PAGE_LABEL} {pageNumber}
+              <PaginationButton
+                disabled={Boolean(
+                  pageNumber && total && pageNumber * MAX_TABLE_SIZE >= total
+                )}
+                onClick={onNextPage}
+              >
+                {I18N.NEXT_BUTTON}
+              </PaginationButton>
             </PaginationRow>
-          </EmptyBox>
+          </TableWrapper>
         </>
       )}
       {status === 404 && <ErrorBox>{I18N.PAYMENT_NOT_FOUND}</ErrorBox>}

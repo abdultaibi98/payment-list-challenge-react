@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getPaymentData } from './utils/getPayments';
-import { getPageNumber } from './utils/getPageNumber';
 import {
   FetchParams,
   usePaymentPageProps,
@@ -8,6 +7,7 @@ import {
   PaymentJson,
   Payment,
 } from '../../types/payment';
+import { MAX_TABLE_SIZE, PAGE_SIZE } from '../../constants/index';
 
 export function usePaymentPage(): usePaymentPageProps {
   const [fetchParams, setFetchParams] = useState<FetchParams>({
@@ -22,7 +22,8 @@ export function usePaymentPage(): usePaymentPageProps {
     ''
   );
   const [inputSearch, setInputSearch] = useState<string | undefined>();
-  const [pageNumber, setPageNumber] = useState<number | undefined>();
+  const [total, setTotal] = useState<number>(0);
+  const pageNumber = fetchParams.page;
 
   async function onSearchClick() {
     const search = inputSearch ? inputSearch : '';
@@ -31,6 +32,19 @@ export function usePaymentPage(): usePaymentPageProps {
       currency: selectedCurrency,
       page: 1,
     });
+  }
+
+  function onNextPage() {
+    const totalPages = Math.ceil(total / MAX_TABLE_SIZE);
+    if (pageNumber && pageNumber < totalPages) {
+      setFetchParams((prev) => ({ ...prev, page: prev.page + 1 }));
+    }
+  }
+
+  function onPreviousPage() {
+    if (pageNumber && pageNumber > 1) {
+      setFetchParams((prev) => ({ ...prev, page: prev.page - 1 }));
+    }
   }
 
   async function onClearClick() {
@@ -43,30 +57,42 @@ export function usePaymentPage(): usePaymentPageProps {
     });
   }
 
-  // async function onPreviousClick() {}
-
-  async function loadPaymentData() {
-    const fetchedPaymentData = await getPaymentData({
-      fetchParams: fetchParams,
+  async function fetchTotalPaymentsCount() {
+    const result = await getPaymentData({
+      fetchParams: {
+        search: fetchParams.search,
+        currency: fetchParams.currency,
+        page: 1,
+        pageSize: PAGE_SIZE,
+      },
       setError,
     });
-    setStatus(fetchedPaymentData?.status);
-    if (!fetchedPaymentData?.response) {
-      setPayments(undefined);
+
+    if (!result?.response) return;
+
+    const json: PaymentJson = await result.response.json();
+    setTotal(json.total);
+  }
+
+  async function loadPaymentData() {
+    await fetchTotalPaymentsCount();
+
+    const result = await getPaymentData({
+      fetchParams: {
+        ...fetchParams,
+        pageSize: MAX_TABLE_SIZE,
+      },
+      setError,
+    });
+
+    setStatus(result?.status);
+
+    if (!result?.response) {
+      setPayments([]);
       return;
     }
 
-    const json: PaymentJson = await fetchedPaymentData.response.json();
-    console.log('json: ', json);
-
-    getPageNumber({
-      inputSearch,
-      selectedCurrency,
-      pageNumber,
-      setError,
-      setStatus,
-      setPageNumber,
-    });
+    const json: PaymentJson = await result.response.json();
     setPayments(json.payments);
   }
 
@@ -83,8 +109,11 @@ export function usePaymentPage(): usePaymentPageProps {
       setInputSearch,
       selectedCurrency,
       setSelectedCurrency,
+      onNextPage,
+      onPreviousPage,
       status,
       pageNumber,
+      total,
     },
     error,
   };

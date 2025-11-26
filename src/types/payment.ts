@@ -69,22 +69,14 @@ export interface PaymentsPageProps {
   setInputSearch: Dispatch<SetStateAction<string | undefined>>;
   selectedCurrency: Currency | string;
   setSelectedCurrency: Dispatch<SetStateAction<Currency | string>>;
+  onNextPage: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onPreviousPage: (event: React.MouseEvent<HTMLButtonElement>) => void;
   status: number | undefined;
   pageNumber: number | undefined;
+  total: number | undefined;
 }
 
 export interface usePaymentPageProps {
   data: PaymentsPageProps;
   error: unknown;
-}
-
-export interface GetPageNumberProps {
-  inputSearch: string | undefined;
-  selectedCurrency: Currency | string;
-  pageNumber: number | undefined;
-  setError: Dispatch<SetStateAction<unknown | undefined>>;
-  setStatus: Dispatch<SetStateAction<number | undefined>>;
-  setPageNumber: Dispatch<SetStateAction<number | undefined>>;
-  next?: boolean;
-  prev?: boolean;
 }

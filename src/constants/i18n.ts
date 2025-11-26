@@ -12,9 +12,9 @@ export const I18N = {
   CLEAR_FILTERS: 'Clear Filters',
 
   // Pagination
-  PREVIOUS_BUTTON: '◀ Previous',
-  NEXT_BUTTON: 'Next ▶',
-  PAGE_LABEL: 'Page',
+  PREVIOUS_BUTTON: '◀ Previous', //done
+  NEXT_BUTTON: 'Next ▶', //done
+  PAGE_LABEL: 'Page', //done
 
   // App title
   APP_TITLE: 'Checkout.com', //done
