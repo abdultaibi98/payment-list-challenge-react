@@ -13,6 +13,13 @@ export interface PaymentData {
   payments: Payment[];
 }
 
+export interface PaymentJson {
+  page: number;
+  pageSize: number;
+  payments: Payment[];
+  total: number;
+}
+
 export interface Payment {
   id?: string;
   customerName?: string;
@@ -39,20 +46,45 @@ export type PaymentStatus =
 
 export type Currency = 'USD' | 'EUR' | 'GBP' | 'AUD' | 'CAD' | 'ZAR' | 'JPY';
 
-export interface PaymentsPageProps {
-  data?: PaymentData;
-}
 export interface Step1TableProps {
   payments: Payment[];
 }
 
 export interface FetchParams {
-  search: string;
+  search: string | undefined;
   currency: Currency | string;
-  page: number;
-  pageSize: number;
+  page: number | number;
+  pageSize?: number;
 }
 export interface GetPaymentDataProps {
   fetchParams: FetchParams;
   setError: Dispatch<SetStateAction<unknown | undefined>>;
+}
+
+export interface PaymentsPageProps {
+  payments: Payment[] | undefined;
+  onSearchClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClearClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  inputSearch: string | undefined;
+  setInputSearch: Dispatch<SetStateAction<string | undefined>>;
+  selectedCurrency: Currency | string;
+  setSelectedCurrency: Dispatch<SetStateAction<Currency | string>>;
+  status: number | undefined;
+  pageNumber: number | undefined;
+}
+
+export interface usePaymentPageProps {
+  data: PaymentsPageProps;
+  error: unknown;
+}
+
+export interface GetPageNumberProps {
+  inputSearch: string | undefined;
+  selectedCurrency: Currency | string;
+  pageNumber: number | undefined;
+  setError: Dispatch<SetStateAction<unknown | undefined>>;
+  setStatus: Dispatch<SetStateAction<number | undefined>>;
+  setPageNumber: Dispatch<SetStateAction<number | undefined>>;
+  next?: boolean;
+  prev?: boolean;
 }

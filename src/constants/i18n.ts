@@ -1,21 +1,26 @@
 export const I18N = {
-  // App title
-  APP_TITLE: 'Checkout.com',
-
-  // Page title
-  PAGE_TITLE: 'All payments',
-
   // Search and filter labels
-  SEARCH_PLACEHOLDER: 'Enter payment ID',
+  SEARCH_PLACEHOLDER: 'Enter payment ID', //done
   SEARCH_LABEL: 'Search payments',
   CURRENCY_FILTER_LABEL: 'Filter by currency',
 
   // Filter options
-  CURRENCIES_OPTION: 'Currencies',
+  CURRENCIES_OPTION: 'Currencies', //done
 
   // Button text
-  SEARCH_BUTTON: 'Search',
+  SEARCH_BUTTON: 'Search', //done
   CLEAR_FILTERS: 'Clear Filters',
+
+  // Pagination
+  PREVIOUS_BUTTON: '◀ Previous',
+  NEXT_BUTTON: 'Next ▶',
+  PAGE_LABEL: 'Page',
+
+  // App title
+  APP_TITLE: 'Checkout.com', //done
+
+  // Page title
+  PAGE_TITLE: 'All payments', //done
 
   // Table headers
   TABLE_HEADER_PAYMENT_ID: 'Payment ID', //done
@@ -25,14 +30,9 @@ export const I18N = {
   TABLE_HEADER_CURRENCY: 'Currency', //done
   TABLE_HEADER_STATUS: 'Status', //done
 
-  // Pagination
-  PREVIOUS_BUTTON: '◀ Previous',
-  NEXT_BUTTON: 'Next ▶',
-  PAGE_LABEL: 'Page',
-
   // Messages
   NO_PAYMENTS_FOUND: 'No payments found.', // done
-  PAYMENT_NOT_FOUND: 'Payment not found.',
+  PAYMENT_NOT_FOUND: 'Payment not found.', //done
   INTERNAL_SERVER_ERROR: 'Internal server error. Please try again later.', //done
   SOMETHING_WENT_WRONG: 'Something went wrong!', //done
 

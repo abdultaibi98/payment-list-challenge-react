@@ -4,15 +4,12 @@ import { usePaymentPage } from './PaymentPageHook';
 import { I18N } from '../../constants/i18n';
 
 export const PaymentPageController: React.FC = () => {
-  const { paymentResponse, error, loading } = usePaymentPage();
+  const { data, error } = usePaymentPage();
 
-  if (loading) return <>Loading…</>;
   if (error) return <>{I18N.INTERNAL_SERVER_ERROR}</>;
-  if (!paymentResponse || !paymentResponse.payments.length)
-    return <>{I18N.NO_PAYMENTS_FOUND}</>;
 
   try {
-    return <PaymentsPage data={paymentResponse} />;
+    return <PaymentsPage {...data} />;
   } catch (err: unknown) {
     return (
       <>
